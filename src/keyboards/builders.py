@@ -17,7 +17,7 @@ def game_markup_builder(result: int, only_finish: bool = False) -> InlineKeyboar
     builder = InlineKeyboardBuilder()
 
     if not only_finish:
-        random_position = randint(0, 6)
+        random_position = randint(0, 5)
         random_results = [
             randint((result) // 2, result)
             if i != random_position else result
