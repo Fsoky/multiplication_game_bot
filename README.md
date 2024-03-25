@@ -24,4 +24,6 @@ poetry install --no-root
 poetry run python src/__main__.py
 ```
 
-![gif](https://i.imgur.com/sm4cjre.gif)
+<p align="center">
+  <img src="https://i.imgur.com/sm4cjre.gif">
+</p>
