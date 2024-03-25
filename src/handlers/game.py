@@ -13,14 +13,14 @@ class Game(Scene, state="game"):
 
     @on.callback_query.enter()
     async def on_enter(
-        self, query: CallbackQuery, state: FSMContext, bot: Bot, step: int | None = 0
+        self, query: CallbackQuery, state: FSMContext, step: int | None = 0
     ) -> Any:
         a, b = randint(1, 10), randint(1, 10)
         result = a * b
         exercise = f"{a} * {b}"
 
         if not step:
-            msg = await query.message.edit_text(
+            await query.message.edit_text(
                 "<b>⭐ Твои решения (0/10):</b>\n<i>Тут ничего нет...</i>\n\n"
                 f"<blockquote><b>Пример:</b> {a} * {b} = ?</blockquote>",
                 reply_markup=game_markup_builder(result)
@@ -28,7 +28,6 @@ class Game(Scene, state="game"):
 
             return await state.update_data(
                 step=step,
-                msgid=msg.message_id,
                 current_result={"exercise": f"{a} * {b}", "result": result}
             )
 
@@ -41,9 +40,7 @@ class Game(Scene, state="game"):
             for ans in data['answers'].values()
         )
 
-        await bot.edit_message_text(
-            chat_id=query.from_user.id,
-            message_id=data["msgid"],
+        await query.message.edit_text(
             text=(
                 f"<b>⭐ Твои решения ({len(data['answers'])}/10):</b>\n"
                 f"{formatted_answers}\n\n"
@@ -57,7 +54,7 @@ class Game(Scene, state="game"):
         )
 
     @on.callback_query(GameFactory.filter(F.action == "check"))
-    async def check_answer(self, query: CallbackQuery, state: FSMContext, bot: Bot) -> None:
+    async def check_answer(self, query: CallbackQuery, state: FSMContext) -> None:
         data = await state.get_data()
         step = data["step"]
         current_result = data["current_result"]
