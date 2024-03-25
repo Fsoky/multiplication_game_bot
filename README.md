@@ -23,3 +23,5 @@ poetry install --no-root
 ```bash
 poetry run python src/__main__.py
 ```
+
+![gif](https://i.imgur.com/sm4cjre.gif)
